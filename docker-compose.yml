@@ -1,0 +1,17 @@
+# Версионирование docker-compose
+version: '3'
+# Указываем сервисы, которые dc должен сбилдить
+services:
+  api:
+    #Забрать Dockerfile из папки api
+    build: ./api
+    #Команда, которая выполнится при старте сервиса
+    command: npm run start
+    #Если вдруг сервер упадет, то пробуем снова запустить контейнер
+    restart: unless-stopped
+    #Указываем, какие порты будут доступны снаружи (слева внешний, справа внутренний)
+    ports:
+      - "3000:3000"
+    environment: 
+      - PORT=3000
+      - HOST=http://realworld-docker.com
