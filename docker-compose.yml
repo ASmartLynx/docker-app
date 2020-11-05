@@ -9,9 +9,23 @@ services:
     command: npm run start
     #Если вдруг сервер упадет, то пробуем снова запустить контейнер
     restart: unless-stopped
-    #Указываем, какие порты будут доступны снаружи (слева внешний, справа внутренний)
+    #Указываем какие порты будут доступны снаружи (слева внешний, справа внутренний)
     ports:
       - "3000:3000"
     environment: 
       - PORT=3000
       - HOST=http://realworld-docker.com
+      - MONGO_URL=mongodb://api_db:27017/api
+    #Указываем какие сервисы следует запустить до этого
+    depends_on:
+      - api_db
+
+  api_db:
+    image: mongo:latest
+    #Хранилище для db вне контейнера
+    volumes:
+      - mongodb_api:/data/db
+
+#Написанный здесь volume позволяет использовать его в любом сервисе
+volumes:
+  mongodb_api:
