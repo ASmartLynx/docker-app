@@ -1,6 +1,14 @@
 version: '3'
 
 services:
+  frontend:
+    command: npm run start
+    #Свойства, которые позволяют работать с интерактивной консолью
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./frontend/src:/usr/src/app/src
+
   api:
     command: npm run dev
     volumes:

@@ -8,3 +8,7 @@ COPY package*.json ./
 RUN npm install
 #Копируем все файлы
 COPY . .
+
+RUN npm run build
+
+RUN npm install -g serve
