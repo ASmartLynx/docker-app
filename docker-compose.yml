@@ -6,8 +6,6 @@ services:
     build: ./frontend
     container_name: docker-frontend
     command: serve -s build -l 3000
-    ports:
-      - "3000:3000"
     restart: unless-stopped
 
 
@@ -58,6 +56,17 @@ services:
     #Хранилище для db вне контейнера
     volumes:
       - mongodb_auth:/data/db
+
+  nginx:
+    image: nginx:stable-alpine
+    container_name: docker-nginx
+    ports:
+      - "80:80"
+    volumes:
+      #Берем из nginx/conf.prod и кладем в etc/nginx/conf.d/nginx.conf
+      - ./nginx/nginx.conf.prod:/etc/nginx/conf.d/nginx.conf
+    depends_on: 
+      - frontend
 
 #Написанный здесь volume позволяет использовать его в любом сервисе
 volumes:
