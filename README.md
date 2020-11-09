@@ -12,3 +12,6 @@ docker-compose -f docker-compose.yml -f docker-compose.development.yml up --buil
 
 ps aux | grep nginx
 Проверяем запущен nginx на машине или нет
+
+docker network
+Вывести список команд для сетей докера

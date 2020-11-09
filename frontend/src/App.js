@@ -1,11 +1,14 @@
 import logo from './logo.svg';
+import axios from 'axios';
 import './App.css';
 
 function App() {
-  // fetch('http://realworld-docker.com/api/posts')
-  //   .then(res => res.json())
-  //   .then(posts => console.log(posts));
-
+  const makeApiRequest = () => {
+    axios('/api/testWithCurrentUser')
+      .then(response => {
+        console.log(response);
+      });
+  }
   return (
     <div className="App">
       <header className="App-header">
@@ -21,6 +24,7 @@ function App() {
         >
           Learn React
         </a>
+        <button onClick={makeApiRequest}>Make api request</button>
       </header>
     </div>
   );

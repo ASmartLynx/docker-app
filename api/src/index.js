@@ -30,6 +30,12 @@ app.get('/test', (req, res) => {
   res.send('Ok');
 });
 
+app.get('/api/testApiData', (req, res) => {
+  res.json({
+    testWithApi: true
+  });
+});
+
 app.get('/testWithCurrentUser', (req, res) => {
   axios.get(authApiUrl + '/currentUser')
     .then(response => {

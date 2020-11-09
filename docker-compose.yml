@@ -7,7 +7,8 @@ services:
     container_name: docker-frontend
     command: serve -s build -l 3000
     restart: unless-stopped
-
+    networks:
+      - realworld-docker-network
 
   api:
     #Забрать Dockerfile из папки api
@@ -19,8 +20,8 @@ services:
     #Если вдруг сервер упадет, то пробуем снова запустить контейнер
     restart: unless-stopped
     #Указываем какие порты будут доступны снаружи (слева внешний, справа внутренний)
-    ports:
-      - "3001:3001"
+    #ports:
+    #  - "3001:3001"
     environment: 
       - PORT=3001
       - HOST=http://realworld-docker.com
@@ -29,20 +30,25 @@ services:
     #Указываем какие сервисы следует запустить до этого
     depends_on:
       - api_db
+    networks:
+      - realworld-docker-network
 
   auth:
     build: ./auth
     container_name: docker-auth
     command: npm run start
     restart: unless-stopped
-    ports:
-      - "3002:3002"
+    #ports:
+    #  - "3002:3002"
     environment:
       - PORT=3002
       - HOST=http://realworld-docker.com
       - MONGO_URL=mongodb://auth_db:27017/auth
+      - API_URL=http://api:3001/api
     depends_on: 
       - auth_db
+    networks:
+      - realworld-docker-network
 
   api_db:
     image: mongo:latest
@@ -50,6 +56,8 @@ services:
     #Хранилище для db вне контейнера
     volumes:
       - mongodb_api:/data/db
+    networks:
+      - realworld-docker-network
     
   auth_db:
     image: mongo:latest
@@ -57,6 +65,8 @@ services:
     #Хранилище для db вне контейнера
     volumes:
       - mongodb_auth:/data/db
+    networks:
+      - realworld-docker-network
 
   nginx:
     image: nginx:stable-alpine
@@ -68,8 +78,16 @@ services:
       - ./nginx/nginx.conf.prod:/etc/nginx/conf.d/nginx.conf
     depends_on: 
       - frontend
+    #Подключаем все сервисы в одну сеть
+    networks:
+      - realworld-docker-network
 
 #Написанный здесь volume позволяет использовать его в любом сервисе
 volumes:
   mongodb_api:
   mongodb_auth:
+
+#Объявление сети
+networks:
+  realworld-docker-network:
+    driver: bridge
