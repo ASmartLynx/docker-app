@@ -2,6 +2,10 @@ import logo from './logo.svg';
 import './App.css';
 
 function App() {
+  // fetch('http://realworld-docker.com/api/posts')
+  //   .then(res => res.json())
+  //   .then(posts => console.log(posts));
+
   return (
     <div className="App">
       <header className="App-header">

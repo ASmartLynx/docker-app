@@ -15,6 +15,13 @@ app.get('/test', (req, res) => {
   res.send('Our api auth is working correctly');
 });
 
+app.get('/api/currenUser', (req, res) => {
+  res.json({
+    id: '123',
+    email: 'foo@email.com'
+  });
+});
+
 connectDb()
   .on('error', console.log)
   .on('disconnected', connectDb)
